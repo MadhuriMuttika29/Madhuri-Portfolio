@@ -23,3 +23,40 @@
 @media(hover:hover) and (pointer:fine){body,a,button{cursor:none!important}}
 @media(max-width:640px){.custom-cursor{display:none}.contact-modal{padding:37px 25px}.contact-modal-actions{align-items:flex-start;flex-direction:column}.contact-modal-links{flex-wrap:wrap}}
 @media(prefers-reduced-motion:reduce){.cursor-ring,.cursor-dot,.contact-modal{transition:none;animation:none}}
+
+@media(max-width:640px){
+  .nav.open{
+    position:fixed;
+    inset:68px 0 0;
+    z-index:30;
+    width:100%;
+    height:calc(100vh - 68px);
+    height:calc(100dvh - 68px);
+    overflow-y:auto;
+    padding:clamp(38px,10vh,88px) 9vw 38px;
+    background:rgba(23,25,22,.985);
+    border-top:1px solid var(--line);
+    border-bottom:0;
+    box-shadow:0 24px 50px rgba(0,0,0,.32);
+    gap:clamp(22px,5vh,42px);
+    animation:mobile-menu-enter .28s cubic-bezier(.2,.75,.2,1) both;
+    overscroll-behavior:contain;
+  }
+  .nav.open>a:not(.nav-resume){
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    font-size:clamp(30px,9vw,44px);
+    letter-spacing:-.055em;
+    border-bottom:1px solid var(--line);
+    padding-bottom:13px;
+  }
+  .nav.open>a:not(.nav-resume) sup{font-size:10px}
+  .nav.open .nav-resume{max-width:180px;font-size:14px}
+  .nav.open .nav-cta{min-height:54px;padding:0 18px;font-size:14px}
+}
+@keyframes mobile-menu-enter{
+  from{opacity:0;transform:translateY(-10px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@media(prefers-reduced-motion:reduce){.nav.open{animation:none}}

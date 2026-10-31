@@ -113,8 +113,19 @@ function App() {
     window.addEventListener('mousemove', onMove, { passive: true });
     return () => { window.removeEventListener('scroll', onScroll); window.removeEventListener('mousemove', onMove); };
   }, [pointerX, pointerY]);
+  useEffect(() => {
+    if (!menuOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    const closeOnEscape = (event: KeyboardEvent) => { if (event.key === 'Escape') setMenuOpen(false); };
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', closeOnEscape);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', closeOnEscape);
+    };
+  }, [menuOpen]);
   const closeMenu = () => setMenuOpen(false);
-  const openContact = () => { setEmailCopied(false); setContactOpen(true); };
+  const openContact = () => { setMenuOpen(false); setEmailCopied(false); setContactOpen(true); };
   const copyEmail = async () => {
     try {
       await navigator.clipboard.writeText('madhuri.muttika29@gmail.com');
@@ -135,8 +146,8 @@ function App() {
     <div className="reading-progress" />
     <motion.div className={`custom-cursor${cursorHover ? ' is-hover' : ''}`} style={{ x: smoothX, y: smoothY }} animate={{ scale: cursorHover ? 1.22 : 1 }} transition={{ type: 'spring', stiffness: 360, damping: 24 }} aria-hidden="true"><span className="cursor-ring"><span>OPEN</span></span><span className="cursor-dot"/></motion.div>
     <header className="topbar"><a className="wordmark" href="#top" aria-label="Madhuri home"><span className="mark">m.</span><span>MADHURI MUTTIKA<br/><small>DEVELOPER · CREATIVE THINKER</small></span></a>
-      <button className="menu-toggle" aria-label={menuOpen ? 'Close menu' : 'Open menu'} onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X/> : <Menu/>}</button>
-      <nav className={menuOpen ? 'nav open' : 'nav'}><a href="#work" onClick={closeMenu}>Work <sup>01</sup></a><a href="#about" onClick={closeMenu}>About <sup>02</sup></a><a href="#contact" onClick={closeMenu}>Contact <sup>03</sup></a><a className="nav-resume" href="/Madhuri_Software_Engineer_Resume.pdf" target="_blank" rel="noreferrer">Resume <ArrowUpRight size={13}/></a><button className="nav-cta" type="button" onClick={openContact}>Let’s talk <ArrowUpRight size={15}/></button></nav>
+      <button className="menu-toggle" aria-label={menuOpen ? 'Close menu' : 'Open menu'} aria-expanded={menuOpen} aria-controls="mobile-navigation" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X/> : <Menu/>}</button>
+      <nav id="mobile-navigation" className={menuOpen ? 'nav open' : 'nav'}><a href="#work" onClick={closeMenu}>Work <sup>01</sup></a><a href="#about" onClick={closeMenu}>About <sup>02</sup></a><a href="#contact" onClick={closeMenu}>Contact <sup>03</sup></a><a className="nav-resume" href="/Madhuri_Software_Engineer_Resume.pdf" target="_blank" rel="noreferrer" onClick={closeMenu}>Resume <ArrowUpRight size={13}/></a><button className="nav-cta" type="button" onClick={openContact}>Let’s talk <ArrowUpRight size={15}/></button></nav>
     </header>
 
     <main id="top">
